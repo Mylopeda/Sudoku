@@ -1,11 +1,11 @@
 <div class="row">
-  <app-cell column="1"></app-cell>
-  <app-cell column="2"></app-cell>
-  <app-cell column="3"></app-cell>
-  <app-cell column="4"></app-cell>
-  <app-cell column="5"></app-cell>
-  <app-cell column="6"></app-cell>
-  <app-cell column="7"></app-cell>
-  <app-cell column="8"></app-cell>
-  <app-cell column="9"></app-cell>
+  <app-cell column="1" [cellValue]="cellValues[0]" (setCellValue)="cellUpdateCallback($event)"></app-cell>
+  <app-cell column="2" [cellValue]="cellValues[1]" (setCellValue)="cellUpdateCallback($event)"></app-cell>
+  <app-cell column="3" [cellValue]="cellValues[2]" (setCellValue)="cellUpdateCallback($event)"></app-cell>
+  <app-cell column="4" [cellValue]="cellValues[3]" (setCellValue)="cellUpdateCallback($event)"></app-cell>
+  <app-cell column="5" [cellValue]="cellValues[4]" (setCellValue)="cellUpdateCallback($event)"></app-cell>
+  <app-cell column="6" [cellValue]="cellValues[5]" (setCellValue)="cellUpdateCallback($event)"></app-cell>
+  <app-cell column="7" [cellValue]="cellValues[6]" (setCellValue)="cellUpdateCallback($event)"></app-cell>
+  <app-cell column="8" [cellValue]="cellValues[7]" (setCellValue)="cellUpdateCallback($event)"></app-cell>
+  <app-cell column="9" [cellValue]="cellValues[8]" (setCellValue)="cellUpdateCallback($event)"></app-cell>
 </div>
