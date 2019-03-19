@@ -38,24 +38,35 @@ export class BoardComponent implements OnChanges {
       value = parseInt(cellValue.value, 10);
     }
 
-    this.board.addNumberToCell(cellValue.column, cellValue.row, value);
+    let errorMessage = '';
 
-    let message: string = '';
+    if (value > 0 && value < 10) {
+      this.board.addNumberToCell(cellValue.column, cellValue.row, value);
 
-    if (this.board.duplicateInRow(cellValue.row, cellValue.column)) {
-      message += ' Duplicate in row';
+      if (this.board.duplicateInRow(cellValue.row, cellValue.column)) {
+        errorMessage += ' Duplicate in row';
+      }
+
+      if (this.board.duplicateInColumn(cellValue.column, cellValue.row)) {
+        errorMessage += ' Duplicate in column';
+      }
+
+      if (this.board.duplicateInBox(cellValue.row, cellValue.column)) {
+        errorMessage += ' Duplicate in box';
+      }
+    } else {
+      errorMessage = 'Number is not 1-9';
+      this.board.addNumberToCell(cellValue.column, cellValue.row, -1);
     }
 
-    if (this.board.duplicateInColumn(cellValue.column, cellValue.row)) {
-      message += ' Duplicate in column';
+    if (errorMessage === '') {
+      const gameIsWon = this.board.gameIsWon();
+      console.log('Game is won:', gameIsWon);
+    } else {
+      console.log('Board has an error');
     }
 
-    if (this.board.duplicateInBox(cellValue.row, cellValue.column)) {
-      message += ' Duplicate in box';
-    }
-
-    this.boardError.emit(message);
-
+    this.boardError.emit(errorMessage);
     this.board.printModel();
   }
 }

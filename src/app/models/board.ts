@@ -21,6 +21,12 @@ export class Board {
         console.log('Model', this.board);
     }
 
+    public gameIsWon(): boolean {
+        const boardIsComplete = this.checkIfCompleteBoard();
+
+        return boardIsComplete;
+    }
+
     public addNumberToCell(column: number, row: number, value: number) {
         row = this.colRowToArrayIndex(row);
         column = this.colRowToArrayIndex(column);
@@ -35,11 +41,13 @@ export class Board {
         const selfValue: number = this.board[selfRow][column];
         let duplicateInColumn = false;
 
-        this.board.forEach((element: number[], index: number) => {
-            if (index !== selfRow && element[column] === selfValue) {
-                duplicateInColumn = true;
-            }
-        });
+        if (selfValue > 0) {
+            this.board.forEach((element: number[], index: number) => {
+                if (index !== selfRow && element[column] === selfValue) {
+                    duplicateInColumn = true;
+                }
+            });
+        }
 
         return duplicateInColumn;
     }
@@ -51,11 +59,13 @@ export class Board {
         const selfValue: number = this.board[row][selfColumn];
         let duplicateInRow = false;
 
-        this.board[row].forEach((element: number, index: number) => {
-            if (index !== selfColumn && element === selfValue) {
-                duplicateInRow = true;
-            }
-        });
+        if (selfValue > 0) {
+            this.board[row].forEach((element: number, index: number) => {
+                if (index !== selfColumn && element === selfValue) {
+                    duplicateInRow = true;
+                }
+            });
+        }
 
         return duplicateInRow;
     }
@@ -71,19 +81,31 @@ export class Board {
         const selfValue: number = this.board[row][column];
         let duplicateInBox = false;
 
-        for (let i = upperLeft.row; i < upperLeft.row + 3; ++i) {
-            for (let j = upperLeft.column; j < upperLeft.column + 3; ++j) {
-                if (i === row && j === column) {
-                    continue;
-                }
-
-                if (selfValue === this.board[i][j]) {
-                    duplicateInBox = true;
+        if (selfValue > 0) {
+            for (let rowIndex = upperLeft.row; rowIndex < upperLeft.row + 3; ++rowIndex) {
+                for (let columnIndex = upperLeft.column; columnIndex < upperLeft.column + 3; ++columnIndex) {
+                    if (!(rowIndex === row && columnIndex === column) && selfValue === this.board[rowIndex][columnIndex]) {
+                        duplicateInBox = true;
+                    }
                 }
             }
         }
 
         return duplicateInBox;
+    }
+
+    private checkIfCompleteBoard(): boolean {
+        let boardIsComplete = true;
+
+        this.board.forEach((rowArray: number[], rowIndex: number) => {
+            rowArray.forEach((value: number, columnIndex: number) => {
+                if (value < 1 || value > 9) {
+                    boardIsComplete = false;
+                }
+            });
+        });
+
+        return boardIsComplete;
     }
 
     private getUpperLeftForBox(row: number, column: number): {row: number, column: number} {
