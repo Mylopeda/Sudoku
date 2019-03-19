@@ -18,9 +18,9 @@ export class CellRowComponent implements OnChanges {
 
   constructor() {
     this.cellValues = new Array(9);
-    
+
     for (let i = 0; i < 9; ++i) {
-      this.cellValues[i] = "";
+      this.cellValues[i] = '';
     }
    }
 
@@ -30,16 +30,13 @@ export class CellRowComponent implements OnChanges {
    }
 
    private initCellValues(json: string) {
-    console.log("Cell row json:", json);
-
     if (json !== undefined) {
-      let boardValues = JSON.parse(json);
+      const boardValues = JSON.parse(json);
       this.cellValues = boardValues[this.row - 1];
     }
    }
 
   cellUpdateCallback(cellValue: {column: number, value: string}) {
-    console.log("row cellValueCallback", cellValue);
     this.setCellValue.emit({column: cellValue.column, row: this.row, value: cellValue.value})
   }
 }

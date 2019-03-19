@@ -16,14 +16,10 @@ export class CellComponent {
    }
 
    evaluateCell() {
-     console.log("Evaluating cell with value", this.cellValue);
      this.tellParentRow();
    }
 
   private tellParentRow() {
-    console.log("Telling parent row");
-    console.log("Column:", this.column);
-    console.log("My cell value:", this.cellValue);
     this.setCellValue.emit({column: this.column, value: this.cellValue});
   }
 }

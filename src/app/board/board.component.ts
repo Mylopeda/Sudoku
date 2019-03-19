@@ -1,4 +1,5 @@
-import { Component, Input, OnChanges, SimpleChanges, SimpleChange } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges, SimpleChange, Output, EventEmitter } from '@angular/core';
+import { Board } from '../models/board';
 
 @Component({
   selector: 'app-board',
@@ -6,14 +7,19 @@ import { Component, Input, OnChanges, SimpleChanges, SimpleChange } from '@angul
   styleUrls: ['./board.component.css']
 })
 export class BoardComponent implements OnChanges {
+  board: Board;
   json: string;
+
+  @Output() boardError = new EventEmitter<string>();
 
   @Input()
   set boardJson(json: string) {
     this.initCellValues(json);
   }
 
-  constructor() { }
+  constructor() {
+    this.board = new Board();
+   }
 
   ngOnChanges(changes: SimpleChanges) {
     const boardJson: SimpleChange = changes.boardJson;
@@ -21,11 +27,35 @@ export class BoardComponent implements OnChanges {
   }
 
   private initCellValues(json: string) {
-    console.log("Board json:", json);
+    this.board.fromJson(json);
     this.json = json;
   }
 
   cellUpdateCallback(cellValue: {column: number, row: number, value: string}) {
-    console.log("board cellUpdateCallback:", cellValue);
+    let value = -1;
+
+    if (cellValue.value !== '') {
+      value = parseInt(cellValue.value, 10);
+    }
+
+    this.board.addNumberToCell(cellValue.column, cellValue.row, value);
+
+    let message: string = '';
+
+    if (this.board.duplicateInRow(cellValue.row, cellValue.column)) {
+      message += ' Duplicate in row';
+    }
+
+    if (this.board.duplicateInColumn(cellValue.column, cellValue.row)) {
+      message += ' Duplicate in column';
+    }
+
+    if (this.board.duplicateInBox(cellValue.row, cellValue.column)) {
+      message += ' Duplicate in box';
+    }
+
+    this.boardError.emit(message);
+
+    this.board.printModel();
   }
 }
