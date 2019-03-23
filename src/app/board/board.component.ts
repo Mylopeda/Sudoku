@@ -10,6 +10,8 @@ export class BoardComponent implements OnChanges {
   board: Board;
   json: string;
 
+  @Output() gameIsWon = new EventEmitter<boolean>();
+
   @Output() boardError = new EventEmitter<string>();
 
   @Input()
@@ -54,6 +56,8 @@ export class BoardComponent implements OnChanges {
       if (this.board.duplicateInBox(cellValue.row, cellValue.column)) {
         errorMessage += ' Duplicate in box';
       }
+    } else if (value === -1) {
+      this.board.addNumberToCell(cellValue.column, cellValue.row, -1);
     } else {
       errorMessage = 'Number is not 1-9';
       this.board.addNumberToCell(cellValue.column, cellValue.row, -1);
@@ -62,6 +66,8 @@ export class BoardComponent implements OnChanges {
     if (errorMessage === '') {
       const gameIsWon = this.board.gameIsWon();
       console.log('Game is won:', gameIsWon);
+
+      this.gameIsWon.emit(gameIsWon);
     } else {
       console.log('Board has an error');
     }

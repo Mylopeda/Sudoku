@@ -1,10 +1,52 @@
 <div class="container">
   <div class="row">
     <div class="col-md-8">
-        <app-board [boardJson]="json" (boardError)="boardError($event)"></app-board>
+        <app-board [boardJson]="json" (gameIsWon)="handleGameIsWon($event)" (boardError)="handleBoardError($event)"></app-board>
     </div>
     <div class="col-md-4" style="background-color: steelblue;">
-      <span>{{boardErrorMsg}}</span>
+      <div class="row">
+        <div class="col-md-4">
+          Game is won:
+        </div>
+        <div class="col-md-8">
+          {{gameIsWon}}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4">
+          Board errors:
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-8">
+          {{boardErrorMsg}}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          Select difficulty:
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <select id="selectDifficulty" #Id="ngModel" [(ngModel)]="selectedDifficulty" (change)="difficultyChanged()">
+            <option [ngValue]="d.Id" *ngFor="let d of difficulties">
+              {{d.Name}}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <button (click)="displaySolution()">Display solution</button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <button (click)="restartDifficulty()">Reset board</button>
+        </div>
+      </div>
     </div>
   </div>
 </div>

@@ -1,18 +1,26 @@
 export class Board {
     private board: number[][];
+    private filledCells: number;
 
     constructor() {
         this.board = [];
+        this.filledCells = 0;
     }
 
     public fromJson(json: string) {
+        this.filledCells = 0;
         const tempBoard = JSON.parse(json);
 
         tempBoard.forEach((rowArray: string[], row: number) => {
             this.board[row] = [];
 
             rowArray.forEach((value: string, column: number) => {
-                this.board[row][column] = parseInt(value, 10);
+                if (value === '') {
+                    this.board[row][column] = -1;
+                } else {
+                    this.board[row][column] = parseInt(value, 10);
+                    ++this.filledCells;
+                }
             });
         });
     }
@@ -22,16 +30,23 @@ export class Board {
     }
 
     public gameIsWon(): boolean {
-        const boardIsComplete = this.checkIfCompleteBoard();
-
-        return boardIsComplete;
+        return this.filledCells === 9 * 9;
     }
 
     public addNumberToCell(column: number, row: number, value: number) {
         row = this.colRowToArrayIndex(row);
         column = this.colRowToArrayIndex(column);
 
+        let oldValue = this.board[row][column];
         this.board[row][column] = value;
+
+        if (value !== oldValue) {
+            if (value === -1) {
+                --this.filledCells;
+            } else {
+                ++this.filledCells;
+            }
+        }
     }
 
     public duplicateInColumn(column: number, selfRow: number): boolean {
@@ -92,20 +107,6 @@ export class Board {
         }
 
         return duplicateInBox;
-    }
-
-    private checkIfCompleteBoard(): boolean {
-        let boardIsComplete = true;
-
-        this.board.forEach((rowArray: number[], rowIndex: number) => {
-            rowArray.forEach((value: number, columnIndex: number) => {
-                if (value < 1 || value > 9) {
-                    boardIsComplete = false;
-                }
-            });
-        });
-
-        return boardIsComplete;
     }
 
     private getUpperLeftForBox(row: number, column: number): {row: number, column: number} {

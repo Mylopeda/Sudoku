@@ -1,3 +1,3 @@
 <div class="col-md-1">
-  <input type="text" size="2" [(ngModel)]="cellValue" (blur)="evaluateCell()" />
+  <input type="text" size="2" [(ngModel)]="value" (blur)="evaluateCell()" [readonly]="cellDisabled" />
 </div>
